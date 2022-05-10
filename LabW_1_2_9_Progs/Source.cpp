@@ -108,7 +108,7 @@ public:
 	//Добавление не работает, не может сравнить элементы
 	void addback(dataPerson data) override
 	{
-		new_dataList.insert(data);
+		//new_dataList.insert(data);
 	}
 	void Delete(int num) override
 	{
@@ -134,32 +134,32 @@ public:
 		dataList = new_dataList;
 		new_dataList.clear();
 	}
-/*	//template <>
-	template <class _Ty1, class _Ty2>
-	_NODISCARD constexpr bool less<void>::operator()(_Ty1&& _Left, _Ty2&& _Right) const {
-		return _Left->dataList < _Right->dataList;
-	}
-
-	bool operator==(const setList& v1) 
-	{
-		return this->new_dataList == v1.new_dataList;
-	}
-	bool operator<(setList v1)
-	{
-		return this->new_dataList < v1.new_dataList;
-	}
-	bool operator>(const setList& v1) const
-	{
-		return this->new_dataList > v1.new_dataList;
-	}*/
+	//template <>
+	//template <class _Ty1, class _Ty2>
+	//_NODISCARD constexpr bool less<void>::operator()(_Ty1&& _Left, _Ty2&& _Right) const {
+	//	return _Left->dataList < _Right->dataList;
+	//}
+	//
+	//bool operator==(const setList& v1) 
+	//{
+	//	return this->new_dataList == v1.new_dataList;
+	//}
+	//bool operator<(setList v1)
+	//{
+	//	return this->new_dataList < v1.new_dataList;
+	//}
+	//bool operator>(const setList& v1) const
+	//{
+	//	return this->new_dataList > v1.new_dataList;
+	//}
 };
 class mapList :InterfaceList {
 private:
 	map<string, dataPerson> dataList;
 	string key;
 	int size, sizeDelete;
+	void Delete(int key) {}
 public:
-	//или сделать Key интом и приращивать в этой же функции
 	void addback(dataPerson data) override
 	{
 		cout << "Ключ: " << endl;
@@ -167,10 +167,7 @@ public:
 		dataList.emplace(key, data);
 		size++;
 	}
-	//Удаление по ключу - в интефейсе int 
-	void Delete(int key)
-	{
-	}
+	//Удаление по ключу
 	void Delete(string key)
 	{
 		dataList.erase(key);
@@ -185,10 +182,6 @@ public:
 		dataList[key].showPerson();
 	}
 };
-
-void selector() {
-
-}
 
 int main() {
 	setlocale(LC_ALL, "rus");
@@ -237,9 +230,9 @@ int main() {
 			//Тестирование set
 			setList test;
 			dataPerson* person = new dataPerson("Leo", "Melee","Koa");
-			test.addback(*person);
+			//test.addback(*person);
 			person = new dataPerson("Rick", "Sanches", "Math");
-			test.addback(*person);
+			//test.addback(*person);
 			test.show();
 			test.show();
 			return 0;
