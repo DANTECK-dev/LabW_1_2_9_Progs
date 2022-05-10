@@ -4,30 +4,32 @@
 class dataPerson {
 public:
 	dataPerson() {}
-	dataPerson(string name, string role, int damage, dataPerson* id = NULL)
+	dataPerson(string surname, string name, string pathr, dataPerson* id = NULL)
 	{
+		this->surname = surname;
 		this->name = name;
-		this->role = role;
-		this->damage = damage;
+		this->pathr = pathr;
 		this->id = id;
 	}
 	void showPerson() {
-		cout << "Name: " << name << endl;
-		cout << "Role: " << role << endl;
-		cout << "Damage: " << damage << endl;
+		cout << "Surname: " << surname
+			<< " Name: " << name
+			<< " Pathr: " << pathr << endl;
 	}
 private:
+	string surname;
 	string name;
-	string role;
-	int damage;
+	string pathr;
 	dataPerson* id;
 };
+
 class InterfaceList {
 public:
 	virtual void addback(dataPerson data) = 0;
 	virtual void Delete(int num) = 0;
 	virtual void show() = 0;
 };
+
 class vectorList :InterfaceList {
 private:
 	vector<dataPerson> dataList;
@@ -63,19 +65,19 @@ public:
 };
 class listList :InterfaceList {
 private:
-	list<dataPerson> dataList1;
+	list<dataPerson> dataList;
 	int size, sizeDelete;
 public:
 	void addback(dataPerson data) override
 	{
-		dataList1.push_front(data);
+		dataList.push_front(data);
 		size += 1;
 	}
 	void Delete(int num)override
 	{
-		list<dataPerson>::iterator iter = dataList1.begin();
+		list<dataPerson>::iterator iter = dataList.begin();
 		int i = 0;
-		while (iter != dataList1.end())
+		while (iter != dataList.end())
 		{
 			if (num == i)
 			{
@@ -84,35 +86,35 @@ public:
 			iter++;
 			i++;
 		}
-		dataList1.erase(iter);
+		dataList.erase(iter);
 		sizeDelete += 1;
 		size -= 1;
 	}
 	void show() override
 	{
-		for (dataPerson n : dataList1)
+		for (dataPerson n : dataList)
 		{
 			n.showPerson();
 		}
-		cout << "Size: " << size << endl;
+		cout << "SizeAdd: " << size << endl;
 		cout << "SizeDelete: " << sizeDelete << endl;
 	}
 };
 class setList :InterfaceList {
 private:
-	set<dataPerson> dataList2;
-	set<dataPerson> new_dataList2;
+	set<dataPerson> dataList;
+	set<dataPerson> new_dataList;
 public:
 	//Добавление не работает, не может сравнить элементы
 	void addback(dataPerson data) override
 	{
-		/*new_dataList2.insert(data);*/
+		new_dataList.insert(data);
 	}
-	void Delete(int num)override
+	void Delete(int num) override
 	{
-		set<dataPerson>::iterator iter = dataList2.begin();
+		set<dataPerson>::iterator iter = dataList.begin();
 		int i = 0;
-		while (iter != dataList2.end())
+		while (iter != dataList.end())
 		{
 			if (num == i)
 			{
@@ -121,35 +123,39 @@ public:
 			iter++;
 			i++;
 		}
-		dataList2.erase(iter);
+		dataList.erase(iter);
 	}
 	void show() override
 	{
-		for (dataPerson n : dataList2)
+		for (dataPerson n : dataList)
 		{
 			n.showPerson();
 		}
-		dataList2 = new_dataList2;
-		new_dataList2.clear();
+		dataList = new_dataList;
+		new_dataList.clear();
 	}
-	/*bool operator()(const setList& v1, const setList& v2) const
+/*	//template <>
+	template <class _Ty1, class _Ty2>
+	_NODISCARD constexpr bool less<void>::operator()(_Ty1&& _Left, _Ty2&& _Right) const {
+		return _Left->dataList < _Right->dataList;
+	}
+
+	bool operator==(const setList& v1) 
 	{
-		return v1.dataList2 < v2.new_dataList2;
-	}*/
+		return this->new_dataList == v1.new_dataList;
+	}
 	bool operator<(setList v1)
 	{
-		return this->new_dataList2 < v1.new_dataList2;
+		return this->new_dataList < v1.new_dataList;
 	}
 	bool operator>(const setList& v1) const
 	{
-		return this->new_dataList2 > v1.new_dataList2;
-	}
-
-
+		return this->new_dataList > v1.new_dataList;
+	}*/
 };
 class mapList :InterfaceList {
 private:
-	map<string, dataPerson> dataList3;
+	map<string, dataPerson> dataList;
 	string key;
 	int size, sizeDelete;
 public:
@@ -158,7 +164,7 @@ public:
 	{
 		cout << "Ключ: " << endl;
 		cin >> key;
-		dataList3.emplace(key, data);
+		dataList.emplace(key, data);
 		size++;
 	}
 	//Удаление по ключу - в интефейсе int 
@@ -167,7 +173,7 @@ public:
 	}
 	void Delete(string key)
 	{
-		dataList3.erase(key);
+		dataList.erase(key);
 		size--;
 		sizeDelete++;
 	}
@@ -176,7 +182,7 @@ public:
 		string key;
 		cout << "КлючShow: " << endl;
 		cin >> key;
-		dataList3[key].showPerson();
+		dataList[key].showPerson();
 	}
 };
 
@@ -204,9 +210,9 @@ int main() {
 		case(1): {
 			//Тетирования вектора
 			vectorList test;
-			dataPerson* person = new dataPerson("FIO", "Melee", 15);
+			dataPerson* person = new dataPerson("Leo", "Melee", "Koa");
 			test.addback(*person);
-			person = new dataPerson("OIF", "Range", 10);
+			person = new dataPerson("Rick", "Sanches", "Math");
 			test.addback(*person);
 			test.show();
 			test.Delete(0);
@@ -217,9 +223,9 @@ int main() {
 		case(2): {
 			//Тетирования списка
 			listList test;
-			dataPerson *person = new dataPerson("FIO", "Melee", 15);
+			dataPerson *person = new dataPerson("Leo", "Melee", "Koa");
 			test.addback(*person);
-			person = new dataPerson("OIF", "Range", 10);
+			person = new dataPerson("Rick", "Sanches", "Math");
 			test.addback(*person);
 			test.show();
 			test.Delete(0);
@@ -230,17 +236,20 @@ int main() {
 		case(3): {
 			//Тестирование set
 			setList test;
-			dataPerson* person = new dataPerson("FIO", "Melee",15);
+			dataPerson* person = new dataPerson("Leo", "Melee","Koa");
 			test.addback(*person);
+			person = new dataPerson("Rick", "Sanches", "Math");
+			test.addback(*person);
+			test.show();
 			test.show();
 			return 0;
 		}
 		case(4): {
 			//Тестирование map
-			dataPerson* person = new dataPerson("FIO", "Melee", 15);
+			dataPerson* person = new dataPerson("Leo", "Melee", "Koa");
 			mapList test;
 			test.addback(*person);
-			person = new dataPerson("OIF", "Range", 10);
+			person = new dataPerson("Rick", "Sanches", "Math");
 			test.addback(*person);
 			test.show();
 			return 0;
