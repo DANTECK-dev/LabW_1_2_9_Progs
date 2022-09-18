@@ -21,6 +21,7 @@ private:
 	string name;
 	string pathr;
 	dataPerson* id;
+
 };
 
 class InterfaceList {
